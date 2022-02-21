@@ -90,7 +90,7 @@ exports.likeSauce = (req, res, next) => {
               }
             )
               .then(() => {
-                res.status(201).json({ message: "ok..." });
+                res.status(201).json({ message: "ok" });
               })
               .catch((error) => {
                 res.status(400).json({ error: error });
@@ -112,7 +112,7 @@ exports.likeSauce = (req, res, next) => {
         }
       )
         .then(() => {
-          res.status(201).json({ message: "Like added!" });
+          res.status(201).json({ message: "Like ajouté" });
         })
         .catch((error) => {
           res.status(400).json({ error: error });
@@ -129,7 +129,7 @@ exports.likeSauce = (req, res, next) => {
         }
       )
         .then(() => {
-          res.status(201).json({ message: "Ok... it's your right..." });
+          res.status(201).json({ message: "Like enlevé" });
         })
         .catch((error) => {
           res.status(400).json({ error: error });
