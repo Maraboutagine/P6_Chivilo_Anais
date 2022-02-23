@@ -1,5 +1,6 @@
 const Sauce = require("../models/sauce");
 const fs = require("fs");
+const sauce = require("../models/sauce");
 
 exports.createSauce = (req, res, next) => {
   console.log("test");
@@ -19,29 +20,44 @@ exports.createSauce = (req, res, next) => {
 };
 
 exports.modifySauce = (req, res, next) => {
-  const sauceObjet = req.file
-    ? {
-        ...JSON.parse(req.body.sauce),
-        imageUrl: `${req.protocol}://${req.get("host")}/images/${
-          req.file.filename
-        }`,
-      }
-    : { ...req.body };
-  Sauce.updateOne({ _id: req.params.id }, { ...sauceObjet, _id: req.params.id })
-    .then(() => res.status(200).json({ message: "bien modifié" }))
-    .catch((error) => res.status(400).json({ error }));
+  console.log(req.body.sauce);
+  Sauce.findOne({ _id: req.params.id }).then((sauce) => {
+    if (res.locals.idUser == sauce.userId) {
+      const sauceObjet = req.file
+        ? {
+            ...JSON.parse(req.body.sauce),
+            imageUrl: `${req.protocol}://${req.get("host")}/images/${
+              req.file.filename
+            }`,
+          }
+        : { ...req.body };
+      Sauce.updateOne(
+        { _id: req.params.id },
+        { ...sauceObjet, _id: req.params.id }
+      )
+        .then(() => res.status(200).json({ message: "bien modifié" }))
+        .catch((error) => res.status(400).json({ error }));
+    } else {
+      res.status(400).json({ message: "non autorisé" });
+    }
+  });
 };
 
 exports.deleteSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
     .then((sauce) => {
-      const filename = sauce.imageUrl.split("/images/")[1];
-      fs.unlink(`images/${filename}`, () => {
-        Sauce.deleteOne({ _id: req.params.id })
-          .then(() => res.status(200).json({ message: "Objet supprimé !" }))
-          .catch((error) => res.status(400).json({ error }));
-      });
+      if (res.locals.idUser == sauce.userId) {
+        const filename = sauce.imageUrl.split("/images/")[1];
+        fs.unlink(`images/${filename}`, () => {
+          Sauce.deleteOne({ _id: req.params.id })
+            .then(() => res.status(200).json({ message: "Objet supprimé !" }))
+            .catch((error) => res.status(400).json({ error }));
+        });
+      } else {
+        res.status(400).json({ message: "non autorisé" });
+      }
     })
+
     .catch((error) => res.status(500).json({ error }));
 };
 

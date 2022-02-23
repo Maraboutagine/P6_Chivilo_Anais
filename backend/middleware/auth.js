@@ -9,6 +9,7 @@ module.exports = async (req, res, next) => {
     if (req.body.userId && req.body.userId !== userId) {
       throw "Invalid user ID";
     } else {
+      res.locals.idUser = userId;
       next();
     }
   } catch {
