@@ -4,15 +4,15 @@ const path = require("path");
 
 const stuffRoutes = require("./routes/stuff");
 const userRoutes = require("./routes/user");
-// Helmet : aide à sécuriser les applications Express en définissant divers en-têtes HTTP
+// Helmet : help secure Express applications by setting various headers HTTP
 const helmet = require("helmet");
 mongoose
   .connect(
     "mongodb+srv://SauceAdmin:ZJCQgbc72uNszal5@cluster0.ik8wu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
-  .then(() => console.log("Connexion à MongoDB réussie !"))
-  .catch(() => console.log("Connexion à MongoDB échouée !"));
+  .then(() => console.log("Successful connection to mongodb!"))
+  .catch(() => console.log("Connection to mongodb failed !"));
 
 const app = express();
 

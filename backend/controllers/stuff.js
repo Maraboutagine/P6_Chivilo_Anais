@@ -12,15 +12,13 @@ exports.createSauce = (req, res, next) => {
       req.file.filename
     }`,
   });
-  console.log(sauce);
   sauce
     .save()
-    .then(() => res.status(201).json({ message: "objet" }))
+    .then(() => res.status(201).json({ message: "object" }))
     .catch((error) => console.log(error));
 };
 
 exports.modifySauce = (req, res, next) => {
-  console.log(req.body.sauce);
   Sauce.findOne({ _id: req.params.id }).then((sauce) => {
     if (res.locals.idUser == sauce.userId) {
       const sauceObjet = req.file
@@ -35,10 +33,10 @@ exports.modifySauce = (req, res, next) => {
         { _id: req.params.id },
         { ...sauceObjet, _id: req.params.id }
       )
-        .then(() => res.status(200).json({ message: "bien modifié" }))
+        .then(() => res.status(200).json({ message: "well modified" }))
         .catch((error) => res.status(400).json({ error }));
     } else {
-      res.status(400).json({ message: "non autorisé" });
+      res.status(400).json({ message: "unauthorized" });
     }
   });
 };
@@ -50,11 +48,11 @@ exports.deleteSauce = (req, res, next) => {
         const filename = sauce.imageUrl.split("/images/")[1];
         fs.unlink(`images/${filename}`, () => {
           Sauce.deleteOne({ _id: req.params.id })
-            .then(() => res.status(200).json({ message: "Objet supprimé !" }))
+            .then(() => res.status(200).json({ message: "deleted Object !" }))
             .catch((error) => res.status(400).json({ error }));
         });
       } else {
-        res.status(400).json({ message: "non autorisé" });
+        res.status(400).json({ message: "unauthorized" });
       }
     })
 
@@ -90,7 +88,7 @@ exports.likeSauce = (req, res, next) => {
               .then(() => {
                 res
                   .status(201)
-                  .json({ message: "Ton avis a été pris en compte!" });
+                  .json({ message: "your point has been taken !" });
               })
               .catch((error) => {
                 res.status(400).json({ error: error });
@@ -128,7 +126,7 @@ exports.likeSauce = (req, res, next) => {
         }
       )
         .then(() => {
-          res.status(201).json({ message: "Like ajouté" });
+          res.status(201).json({ message: "Like added" });
         })
         .catch((error) => {
           res.status(400).json({ error: error });
@@ -145,7 +143,7 @@ exports.likeSauce = (req, res, next) => {
         }
       )
         .then(() => {
-          res.status(201).json({ message: "Like enlevé" });
+          res.status(201).json({ message: "Like removed" });
         })
         .catch((error) => {
           res.status(400).json({ error: error });
